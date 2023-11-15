@@ -29,7 +29,7 @@
                             </tr>
                             <tr>
                                 <td>Harga</td>
-                                <td><button class="btn btn-success"><?php echo "Rp " . number_format($brg->harga, 0, ",", "."); ?></button></td>
+                                <td><div class="btn btn-success"><?php echo "Rp " . number_format($brg->harga, 0, ",", "."); ?></div></td>
                             </tr>
                         </table>
                         <div style="display: flex; justify-content: flex-end; align-items: flex-end; height: 19vh;">

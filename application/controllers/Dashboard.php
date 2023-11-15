@@ -4,13 +4,21 @@
 
 class Dashboard extends CI_Controller
 {
-    public function index()
+    public function __construct()
     {
-        $data['barang'] = $this->model_barang->tampil_data()->result();
-        $this->load->view('template/header');
-        $this->load->view('template/sidebar');
-        $this->load->view('template/footer');
-        $this->load->view('kategori/dashboard', $data);
+        parent::__construct();
+
+        if ($this->session->userdata('role_id') != 2) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+Belum Login!!              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            ');
+
+            // Redirect to login or another page if the condition is not met
+            redirect('auth/login');
+        }
     }
     public function tambah_keranjang($id_brg)
     {
@@ -25,22 +33,24 @@ class Dashboard extends CI_Controller
         );
 
         $this->cart->insert($data);
-        redirect('dashboard');
+        redirect('welcome');
     }
-    public function detail_keranjang(){
+    public function detail_keranjang()
+    {
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
         $this->load->view('template/footer');
         $this->load->view('keranjang');
     }
-    public function hapus(){
+    public function hapus()
+    {
         $this->cart->destroy();
-        redirect('dashboard');
+        redirect('welcome');
     }
     public function hapus_id($id)
     {
         $cart_content = $this->cart->contents();
-    
+
         foreach ($cart_content as $item) {
             if ($item['id'] == $id) {
                 $data = array('rowid' => $item['rowid'], 'qty' => 0);
@@ -48,28 +58,31 @@ class Dashboard extends CI_Controller
                 break;
             }
         }
-    
+
         redirect('dashboard/detail_keranjang');
     }
-    public function bayar(){
+    public function bayar()
+    {
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
         $this->load->view('template/footer');
         $this->load->view('bayar');
     }
-    public function proses(){
+    public function proses()
+    {
         $is_processed = $this->model_invoice->index();
-        if($is_processed){
-        $this->cart->destroy();
-        $this->load->view('template/header');
-        $this->load->view('template/sidebar');
-        $this->load->view('template/footer');
-        $this->load->view('proses');
-        }else{
+        if ($is_processed) {
+            $this->cart->destroy();
+            $this->load->view('template/header');
+            $this->load->view('template/sidebar');
+            $this->load->view('template/footer');
+            $this->load->view('proses');
+        } else {
             echo "Maaf, Pesanan Anda Gagal diproses";
         }
     }
-    public function detail($id_brg){
+    public function detail($id_brg)
+    {
         $data['barang'] = $this->model_barang->detail($id_brg);
         $this->load->view('template/header');
         $this->load->view('template/sidebar');

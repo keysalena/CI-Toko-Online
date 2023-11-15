@@ -8,7 +8,7 @@
     </div>
 </div> -->
 <div class="container-fluid">
-    <dib class="btn btn-sm btn-success col-md-8">
+    <dib class="btn btn-sm btn-success col-md-12">
         <?php
         $grand_total = 0;
         if ($keranjang = $this->cart->contents()) {

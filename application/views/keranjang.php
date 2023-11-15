@@ -23,7 +23,7 @@
                                 <input class="form-control quantity-input" type="number" name="pembelian" value="<?php echo $items['qty'] ?>" min="1" max="<?php echo $items['stok'] ?>" data-price="<?php echo $items['price']; ?>">
                             </td>
                             <td align="right"><?php echo "Rp " . number_format($items['price'], 0, ",", ".")  ?></td>
-                            <td align="right"><?php echo "Rp " . number_format($items['subtotal'], 0, ",", ".")  ?></td>
+                            <td align="right" class="subtotal"><?php echo "Rp " . number_format($items['subtotal'], 0, ",", ".")  ?></td>
                             <td align="center"><a href="<?php echo base_url('dashboard/hapus_id/') . $items['id']; ?>" class="btn btn-danger btn-sm"><i class="fas fa-trash fa-sm"></i></a></td>
                         </tr>
                     <?php endforeach; ?>
@@ -52,34 +52,23 @@
     </div>
 </div>
 <script>
-    // jQuery script to update subtotal and total dynamically
-    $('.quantity-input').on('input', function() {
-        var quantity = $(this).val();
-        var price = $(this).data('price');
-        var subtotal = quantity * price;
+   $('.quantity-input').on('input', function() {
+    var quantity = $(this).val();
+    var price = $(this).data('price');
+    var subtotal = quantity * price;
 
-        // Update the subtotal in the same row
-        $(this).closest('tr').find('.subtotal').text("Rp " + number_format(subtotal, 0, ",", "."));
+    $(this).closest('tr').find('.subtotal').text("Rp " + number_format(subtotal, 0, ",", "."));
 
-        // Update the total by recalculating it based on all subtotals
-        updateTotal();
+    updateTotal();
+});
+
+function updateTotal() {
+    var total = 0;
+    $('.subtotal').each(function() {
+        var subtotalText = $(this).text().replace('Rp ', '').replace(/\./g, '');
+        total += parseFloat(subtotalText);
     });
 
-    // Function to update the total based on all subtotals
-    function updateTotal() {
-        var total = 0;
-        $('.subtotal').each(function() {
-            var subtotalText = $(this).text().replace('Rp ', '').replace(/\./g, '');
-            total += parseFloat(subtotalText);
-        });
-
-        // Update the total
-        $('#total').text("Rp " + number_format(total, 0, ",", "."));
-    }
-
-    // Function to format number
-    function number_format(number, decimals, dec_point, thousands_sep) {
-        number = number.toFixed(decimals);
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep);
-    }
+    $('#total').text("Rp " + number_format(total, 0, ",", "."));
+}
 </script>

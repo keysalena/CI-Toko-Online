@@ -22,6 +22,15 @@
         th {
             color: black;
         }
+        .icon {
+            width: 45px;
+            height: 40px;
+            /* Adjust the height as needed to make it smaller */
+            /* margin-right: 10px; */
+            /* Adjust the margin as needed */
+            /* filter: invert(70%); */
+            /* This inverts the image color to white */
+        }
     </style>
 
 </head>
